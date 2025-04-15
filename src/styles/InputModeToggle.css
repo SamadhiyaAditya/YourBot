@@ -1,0 +1,19 @@
+.toggle-mode-container {
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px;
+  }
+  
+  .toggle-mode-btn {
+    padding: 8px 14px;
+    background-color: #ff4d00;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .toggle-mode-btn:hover {
+    background-color: #ff3300;
+  }
+  

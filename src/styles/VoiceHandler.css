@@ -1,0 +1,14 @@
+button {
+    padding: 8px 14px;
+    border: none;
+    background-color: #333;
+    color: white;
+    border-radius: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    background-color: gray;
+  }
+  
