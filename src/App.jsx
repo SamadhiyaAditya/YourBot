@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Chat from './pages/Chat';
-import Home from './pages/Home'; // Import the Home component
+import Home from './pages/Home';
 import { auth } from './Firebase/firebase';
 
 const App = () => {

@@ -3,9 +3,8 @@ import React, { useEffect, useRef, useState } from 'react';
 const VoiceHandler = ({ onVoiceInput, botResponseToSpeak, inputMode }) => {
   const recognitionRef = useRef(null);
   const [isListening, setIsListening] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);  // New state to track speaking status
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
-  // Handle Voice Recognition (Input)
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -33,20 +32,15 @@ const VoiceHandler = ({ onVoiceInput, botResponseToSpeak, inputMode }) => {
     }
   }, [onVoiceInput]);
 
-  // Handle Speech Synthesis (Output)
   useEffect(() => {
     if (botResponseToSpeak && inputMode === 'voice' && !isSpeaking) {
-      setIsSpeaking(true);  // Set speaking status to true before speaking
+      setIsSpeaking(true);
       const synth = window.speechSynthesis;
-      
-      // Cancel any ongoing speech before starting new one
       synth.cancel();
-
       const utterance = new SpeechSynthesisUtterance(botResponseToSpeak);
       utterance.lang = 'en-US';
-
       utterance.onend = () => {
-        setIsSpeaking(false);  // Reset speaking status when speech ends
+        setIsSpeaking(false);
       };
 
       synth.speak(utterance);
@@ -58,7 +52,7 @@ const VoiceHandler = ({ onVoiceInput, botResponseToSpeak, inputMode }) => {
       recognitionRef.current.start();
     }
   };
-
+  
   return (
     <div>
       <button onClick={startListening} disabled={isListening}>

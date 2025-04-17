@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { auth, provider } from '../../Firebase/firebase'; // Firebase imports
+import { auth, provider } from '../../Firebase/firebase';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/form.css';
 
@@ -9,22 +9,20 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  // Handle login with email and password
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('/chat');  // Redirect to chat page on successful login
+      navigate('/chat');
     } catch (error) {
       alert(error.message);
     }
   };
 
-  // Handle Google login
   const handleGoogleLogin = async () => {
     try {
       await signInWithPopup(auth, provider);
-      navigate('/chat');  // Redirect to chat page on successful login
+      navigate('/chat');
     } catch (error) {
       alert(error.message);
     }

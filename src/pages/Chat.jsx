@@ -84,13 +84,11 @@ const Chat = () => {
         setUserChats(chats);
     };
 
-    // Initial load
     useEffect(() => {
         startNewChat();
         loadChatList();
     }, []);
 
-    // Load messages whenever valid chatId is set
     useEffect(() => {
         if (!chatId) return;
         setLoadingMessages(true);
@@ -98,7 +96,6 @@ const Chat = () => {
         return () => unsubscribe();
     }, [chatId]);
 
-    // Auto delete empty chat after 5 mins
     useEffect(() => {
         if (chatStartTime && Date.now() - chatStartTime > 300000) {
             if (messages.length === 0 && isChatCreated) {
@@ -118,7 +115,6 @@ const Chat = () => {
         e.preventDefault();
         if (!message.trim()) return;
     
-        // Show loader and stop button when sending a message
         setLoadingMessages(true);
         setIsBotSpeaking(true);
         setIsStopButtonVisible(true);
@@ -143,8 +139,7 @@ const Chat = () => {
                     timestamp: serverTimestamp()
                 });
             }
-    
-            // Add user's message to chat
+
             await addDoc(
                 collection(db, 'users', auth.currentUser.uid, 'chats', currentChatId, 'messages'),
                 {
@@ -159,13 +154,10 @@ const Chat = () => {
             setMessage('');
             await loadChatList();
     
-            // Define the multilingual system prompt
             const systemPrompt = `You are a multilingual chatbot. Detect the language of the user's input. If it’s not English, respond in that same language and also provide the English translation in brackets. If it is English, reply normally.`;
     
-            // Send the message to the bot with system prompt
             const { botMessage } = await sendMessage(message, systemPrompt);
     
-            // Add bot's message to chat
             await addDoc(
                 collection(db, 'users', auth.currentUser.uid, 'chats', currentChatId, 'messages'),
                 {
@@ -177,55 +169,44 @@ const Chat = () => {
                 }
             );
     
-            // Set bot's voice output
             setBotVoiceOutput(botMessage);
     
-            // Cancel any ongoing speech before starting new speech
             window.speechSynthesis.cancel();
     
-            // Handle speech output
             const speech = new SpeechSynthesisUtterance(botMessage);
     
             speech.onend = () => {
-                setIsBotSpeaking(false);  // Stop bot speaking indicator
-                setLoadingMessages(false);  // Stop loader when speech ends
-                setIsStopButtonVisible(false);  // Hide stop button when speech ends
+                setIsBotSpeaking(false);
+                setLoadingMessages(false);
+                setIsStopButtonVisible(false);
             }
-    
-            // Start the speech
+
             window.speechSynthesis.speak(speech);
     
-            // Show the stop button while bot is speaking (or processing text)
             if (inputMode !== 'text') {
-                // Only display loader and stop button in voice mode
-                setIsStopButtonVisible(true);  // Show stop button
+                setIsStopButtonVisible(true);
             }
     
         } catch (error) {
             console.error('Error sending message:', error);
             setIsBotSpeaking(false);
             setLoadingMessages(false);
-            setIsStopButtonVisible(false);  // Hide stop button in case of error
+            setIsStopButtonVisible(false);
         }
     };
     
 
     const handleStop = () => {
-        // Stop the bot's speech
         window.speechSynthesis.cancel();
-        setIsBotSpeaking(false);  // Hide speaking indicator
-        setLoadingMessages(false);  // Hide loader
+        setIsBotSpeaking(false);
+        setLoadingMessages(false);
         setIsStopButtonVisible(false);
     };
-
-
-
-
 
     const deleteChat = async (id) => {
         await deleteDoc(doc(db, 'users', auth.currentUser.uid, 'chats', id));
         loadChatList();
-        if (chatId === id) startNewChat(); // If deleted current chat, reset
+        if (chatId === id) startNewChat();
     };
 
     const handleRenameChat = async (newName) => {
@@ -303,7 +284,7 @@ const Chat = () => {
                         inputMode={inputMode}
                         onVoiceInput={(voiceText) => {
                             setMessage(voiceText);
-                            inputRef.current?.focus(); // brings focus back
+                            inputRef.current?.focus();
                         }}
 
                         botResponseToSpeak={botVoiceOutput}

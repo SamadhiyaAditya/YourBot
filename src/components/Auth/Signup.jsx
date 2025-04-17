@@ -15,13 +15,11 @@ const Signup = () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(userCredential.user, { displayName: username });
-
-      // Store user data in Firestore under the "users" collection
       await setDoc(doc(db, 'users', userCredential.user.uid), {
         name: username,
         email: email,
-        mode: 'voice', // default preference
-        chats: [] // Initialize chat history as an empty array
+        mode: 'voice',
+        chats: []
       });
 
       alert('User registered successfully!');
@@ -34,13 +32,11 @@ const Signup = () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-
-      // Store user data in Firestore under the "users" collection
       await setDoc(doc(db, 'users', user.uid), {
         name: user.displayName,
         email: user.email,
-        mode: 'voice', // default preference
-        chats: [] // Initialize chat history as an empty array
+        mode: 'voice',
+        chats: []
       });
 
       alert('Google Sign-Up successful!');
